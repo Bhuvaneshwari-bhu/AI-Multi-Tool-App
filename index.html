@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Multi-Tool Assistant</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f0f1a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 30px 16px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 780px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    background: linear-gradient(90deg, #7c3aed, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p {
+    color: #94a3b8;
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+
+  .card {
+    background: #1e1e2e;
+    border: 1px solid #2d2d44;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  select {
+    width: 100%;
+    padding: 10px 14px;
+    background: #12121f;
+    border: 1px solid #2d2d44;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  select:focus { border-color: #7c3aed; }
+
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 14px;
+    background: #12121f;
+    border: 1px solid #2d2d44;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+    font-family: inherit;
+    line-height: 1.5;
+  }
+
+  textarea:focus { border-color: #7c3aed; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  button:hover { opacity: 0.85; }
+  button:active { transform: scale(0.97); }
+
+  #sendBtn   { background: linear-gradient(135deg, #7c3aed, #5b21b6); color: #fff; }
+  #speakBtn  { background: #0d9488; color: #fff; }
+  #dlBtn     { background: #1d4ed8; color: #fff; }
+
+  .output-box {
+    background: #12121f;
+    border: 1px solid #2d2d44;
+    border-radius: 8px;
+    padding: 16px;
+    min-height: 80px;
+    white-space: pre-wrap;
+    line-height: 1.7;
+    font-size: 0.95rem;
+    color: #e2e8f0;
+    position: relative;
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .output-header span {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  #copyBtn {
+    background: #2d2d44;
+    color: #94a3b8;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    border-radius: 6px;
+  }
+
+  #copyBtn:hover { background: #3d3d5c; color: #e2e8f0; }
+
+  .loader {
+    display: none;
+    text-align: center;
+    color: #7c3aed;
+    font-size: 0.9rem;
+    padding: 10px 0;
+  }
+
+  .loader span {
+    display: inline-block;
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1; }
+  }
+
+  .placeholder {
+    color: #4a4a6a;
+    font-style: italic;
+  }
+
+  strong { color: #a78bfa; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>AI Multi-Tool Assistant</h1>
+    <p>Powered by Google Gemini · 7 tools in one place</p>
+  </header>
+
+  <div class="card">
+    <label for="feature">Select Feature</label>
+    <select id="feature">
+      <option value="chat">💬 Chat (max 100 words)</option>
+      <option value="summarize">📋 Summarize (5 bullets)</option>
+      <option value="notes">📝 Notes (Title + Key Points + Explanation)</option>
+      <option value="email">📧 Email Writer (Subject + Body)</option>
+      <option value="questions">❓ Question Generator (5 questions)</option>
+      <option value="translate">🌐 Translate (English ↔ Telugu)</option>
+      <option value="prompt">✨ Prompt Improver</option>
+    </select>
+
+    <label for="inputText">Your Input</label>
+    <textarea id="inputText" placeholder="Type your message or paste text here..."></textarea>
+
+    <div class="btn-row">
+      <button id="sendBtn" onclick="sendRequest()">▶ Send</button>
+      <button id="speakBtn" onclick="speakText()">🔊 Speak</button>
+      <button id="dlBtn" onclick="downloadAudio()">⬇ Download .wav</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="output-header">
+      <span>Output</span>
+      <button id="copyBtn" onclick="copyOutput()">📋 Copy</button>
+    </div>
+    <div class="loader" id="loader"><span>Generating response...</span></div>
+    <div class="output-box" id="output">
+      <span class="placeholder">Your result will appear here.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const API = "";  // empty = same origin (Flask serves index.html)
+
+  function getInput() {
+    return document.getElementById("inputText").value.trim();
+  }
+
+  function getFeature() {
+    return document.getElementById("feature").value;
+  }
+
+  function setOutput(text) {
+    const box = document.getElementById("output");
+    box.innerHTML = formatOutput(text);
+  }
+
+  function formatOutput(text) {
+    // Bold **text**, render line breaks
+    return text
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\n/g, "<br>");
+  }
+
+  async function sendRequest() {
+    const message = getInput();
+    if (!message) { alert("Please enter some text."); return; }
+
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("output").innerHTML = "";
+
+    try {
+      const res = await fetch(`${API}/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, feature: getFeature() })
+      });
+      const data = await res.json();
+      setOutput(data.response || data.error || "No response.");
+    } catch (err) {
+      setOutput("Error: Could not connect to backend.");
+    } finally {
+      document.getElementById("loader").style.display = "none";
+    }
+  }
+
+  function getCurrentOutputText() {
+    return document.getElementById("output").innerText;
+  }
+
+  function speakText() {
+    const text = getCurrentOutputText() || getInput();
+    if (!text || text === "Your result will appear here.") {
+      alert("Nothing to speak. Generate a response first or type in the input.");
+      return;
+    }
+    if (!window.speechSynthesis) { alert("Text-to-Speech not supported in this browser."); return; }
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = "en-US";
+    utt.rate = 0.95;
+    window.speechSynthesis.speak(utt);
+  }
+
+  async function downloadAudio() {
+    const text = getCurrentOutputText() || getInput();
+    if (!text || text === "Your result will appear here.") {
+      alert("Generate a response first, then download audio.");
+      return;
+    }
+
+    const btn = document.getElementById("dlBtn");
+    btn.textContent = "⏳ Generating...";
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(`${API}/audio`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert("Audio error: " + (err.error || "Unknown error"));
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "output.wav";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert("Failed to download audio. Is the backend running?");
+    } finally {
+      btn.textContent = "⬇ Download .wav";
+      btn.disabled = false;
+    }
+  }
+
+  function copyOutput() {
+    const text = getCurrentOutputText();
+    if (!text || text === "Your result will appear here.") return;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById("copyBtn");
+      btn.textContent = "✅ Copied!";
+      setTimeout(() => btn.textContent = "📋 Copy", 1500);
+    });
+  }
+
+  // Allow Ctrl+Enter to send
+  document.getElementById("inputText").addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key === "Enter") sendRequest();
+  });
+</script>
+</body>
+</html>
