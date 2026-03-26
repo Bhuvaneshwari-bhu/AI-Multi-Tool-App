@@ -49,6 +49,8 @@ The assistant uses a simple **Flask** backend for API handling and **JavaScript/
 The project demonstrates a functional, multi-purpose AI assistant in a compact web application. It provides an engaging platform to explore AI capabilities, experiment with different tasks, and test generative AI features in real-time.
 
 **Experience & Journey:**
+
 I first experimented with all these AI features—chat, summarization, question generation, notes, email writing, translation—using Hugging Face Transformers in Google Colab. This hands-on practice gave me the idea to build a unified AI assistant web app. To implement it efficiently, I used Claude AI as the backend, integrated it with a Flask server, and created a frontend interface to interact with the AI. Along the way, I learned API integration, prompt design, handling responses, text-to-speech conversion, and troubleshooting minor errors, which helped me understand full-stack AI application development.
+
 ---
 
