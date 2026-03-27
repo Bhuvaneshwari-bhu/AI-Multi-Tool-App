@@ -7,8 +7,8 @@ app = Flask(__name__, static_folder=".", static_url_path="")
 CORS(app)
 
 # ---- CONFIG ----
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # Create the GenAI client
