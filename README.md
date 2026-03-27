@@ -4,7 +4,7 @@
 ## **AI Multi-Tool Assistant**
 
 **Description:**
-This project is a web-based AI Multi-Tool Assistant powered by Google Gemini (Claude AI alternative). It integrates multiple AI functionalities into a single interface, allowing users to perform tasks such as:
+This project is a web-based AI Multi-Tool Assistant powered by Google Gemini. It integrates multiple AI functionalities into a single interface, allowing users to perform tasks such as:
 
 * Conversational Q&A (chat)
 * Text summarization
@@ -50,7 +50,7 @@ The project demonstrates a functional, multi-purpose AI assistant in a compact w
 
 **Experience & Journey:**
 
-I first experimented with all these AI features—chat, summarization, question generation, notes, email writing, translation—using Hugging Face Transformers in Google Colab. This hands-on practice gave me the idea to build a unified AI assistant web app. To implement it efficiently, I used Claude AI as the backend, integrated it with a Flask server, and created a frontend interface to interact with the AI. Along the way, I learned API integration, prompt design, handling responses, text-to-speech conversion, and troubleshooting minor errors, which helped me understand full-stack AI application development.
+I first experimented with all these AI features—chat, summarization, question generation, notes, email writing, translation—using Hugging Face Transformers in Google Colab. This hands-on practice gave me the idea to build a unified AI assistant web app. To implement it efficiently, I used Claude code, integrated a Flask server, and created a frontend interface to interact with the AI. Along the way, I learned API integration, prompt design, handling responses, text-to-speech conversion, and troubleshooting minor errors, which helped me understand full-stack AI application development.
 
 ---
 
