@@ -30,6 +30,13 @@ def get_prompt(feature, text):
 @app.route("/")
 def index():
     return app.send_static_file("index.html")
+    
+@app.route("/check_key")
+def check_key():
+    if API_KEY:
+        return f"GEMINI_API_KEY is set and has {len(API_KEY)} characters."
+    else:
+        return "GEMINI_API_KEY is not set!"
 
 @app.route("/generate", methods=["POST"])
 def generate():
